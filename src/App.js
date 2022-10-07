@@ -19,7 +19,6 @@ const allowedExtensions = ["csv"];
 
 function App() {
   const [data, setData] = useState([]);
- 
 
   // It state will contain the error when
   // correct file extension is not used
@@ -65,13 +64,16 @@ function App() {
     // If user clicks the parse button without
     // a file we show a error
 
-    if(!program){
-      alert('please fill in the year and program field')
+    if (!program) {
+      alert("please fill in the year and program field");
     }
-    if(!code){
-      alert('please fill in the departmental code ')
+    if (!code) {
+      alert("please fill in the departmental code ");
     }
-    if (!file) {setError("Enter a valid file"); alert('enter a csv file')};
+    if (!file) {
+      setError("Enter a valid file");
+      alert("enter a csv file");
+    }
 
     // Initialize a reader which allows user
     // to read any file or blob.
@@ -84,54 +86,53 @@ function App() {
       const parsedData = csv?.data;
       const columns = Object.values(parsedData);
       setData(columns);
-      console.log(columns)
+      console.log(columns);
       // console.log(columns)
-      const columns1 = Object.values(parsedData)[0]
-      const columns2 = Object.values(parsedData)[1]
-      console.log(columns1)
-      console.log(columns2)
+      const columns1 = Object.values(parsedData)[0];
+      const columns2 = Object.values(parsedData)[1];
+      console.log(columns1);
+      console.log(columns2);
       let unNames = new Array();
       for (let value of columns) {
         let firstName = value.first_name;
         let lasttName = value.last_name;
         unNames.push(`${firstName} ${lasttName}`);
       }
+      //sort method javascript?
       let matricNUM = new Object();
       // console.log(unNames)
       let here = unNames.forEach((element) => {
         let index1 = unNames.indexOf(element);
-       
 
+        unNames.sort();
         if (index1 < 9) {
-          let stringindex = `${program}${code}00${index1+1}`;
+          let stringindex = `${program}${code.toUpperCase()}00${index1 + 1}`;
           matricNUM[element] = stringindex;
         } else if (index1 > 9 && index1 < 99) {
-          let stringindex = `${program}${code}${index1+1}`;
+          let stringindex = `${program}${code.toUpperCase()}0${index1 + 1}`;
           matricNUM[element] = stringindex;
         } else {
-          let stringindex = `${program}${code}${index1+1}`;
+          let stringindex = `${program}${code.toUpperCase()}${index1 + 1}`;
           matricNUM[element] = stringindex;
         }
         console.log(matricNUM);
-        
 
         //merge the data with CSV
 
         //object.keys in javascript?
-        
       });
       var csv1 = "Name,\tProfession\n";
-        let matn = Object.keys(matricNUM);
-        matn.forEach((row) => {
-          csv1 += `${row},${matricNUM[row]}`;
-          csv1 += "\n";
-        })
-    
-        var hiddenElement = document.createElement("a");
-        hiddenElement.href = "data:text/csv;charset=utf-8," + encodeURI(csv1);
-        hiddenElement.target = "_blank";
-        hiddenElement.download = "GeneratedMatNo.csv";
-        hiddenElement.click()
+      let matn = Object.keys(matricNUM);
+      matn.forEach((row) => {
+        csv1 += `${row},${matricNUM[row]}`;
+        csv1 += "\n";
+      });
+
+      var hiddenElement = document.createElement("a");
+      hiddenElement.href = "data:text/csv;charset=utf-8," + encodeURI(csv1);
+      hiddenElement.target = "_blank";
+      hiddenElement.download = "GeneratedMatNo.csv";
+      hiddenElement.click();
     };
 
     reader.readAsText(file);
@@ -152,11 +153,11 @@ function App() {
         <form onSubmit={handleSubmit}>
           <div className="new-expense__controls">
             <div className="new-expense__control">
-              <label>departmental code</label>
+              <label>departmental code Eg:cybersecurity (CYS)</label>
               <input type="text" onChange={handleChange} value={code} />
             </div>
             <div className="new-expense__control">
-              <label>year & program</label>
+              <label>year & program Eg:(U19)</label>
               <input type="text" onChange={handleChange1} value={program} />
             </div>
             <div className="new-expense__control">
@@ -169,10 +170,7 @@ function App() {
               />
             </div>
             <div className="new-expense__actions">
-              <button type="submit">
-              generate
-             
-              </button>
+              <button type="submit">generate</button>
             </div>
           </div>
         </form>
